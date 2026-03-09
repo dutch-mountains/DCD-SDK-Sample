@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -100,9 +100,9 @@
     <Reference Include="AWSSDK.S3, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
       <HintPath>..\packages\AWSSDK.S3.3.7.305.4\lib\net45\AWSSDK.S3.dll</HintPath>
     </Reference>
-	<PackageReference Include="DYMO.Connect.SDK" Version="1.6.0" />
-	<PackageReference Include="DYMO.CrossPlatform.Common.Windows" Version="1.6.0" />
-	<PackageReference Include="DYMO.LabelAPI.Windows" Version="1.6.0" />
+    <PackageReference Include="DYMO.Connect.SDK" Version="1.6.0" />
+    <PackageReference Include="DYMO.CrossPlatform.Common.Windows" Version="1.6.0" />
+    <PackageReference Include="DYMO.LabelAPI.Windows" Version="1.6.0" />
     <Reference Include="Microsoft.Office.Interop.InfoPath.SemiTrust, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="OpenTK, Version=3.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.3.1.0\lib\net20\OpenTK.dll</HintPath>
@@ -111,7 +111,6 @@
       <HintPath>..\packages\OpenTK.GLControl.3.1.0\lib\net20\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="SkiaSharp, Version=2.80.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\SkiaSharp.2.80.2\lib\net462\SkiaSharp.dll</HintPath>
     </Reference>
     <Reference Include="SkiaSharp.Views.Desktop, Version=2.80.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\SkiaSharp.Views.2.80.2\lib\net462\SkiaSharp.Views.Desktop.dll</HintPath>
@@ -225,23 +224,10 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\AWSSDK.S3.3.7.305.4\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
-    <Analyzer Include="..\packages\AWSSDK.S3.3.7.305.4\analyzers\dotnet\cs\SharedAnalysisCode.dll" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />
-  <Import Project="..\packages\SkiaSharp.2.80.2\build\net462\SkiaSharp.targets" Condition="Exists('..\packages\SkiaSharp.2.80.2\build\net462\SkiaSharp.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\SkiaSharp.2.80.2\build\net462\SkiaSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SkiaSharp.2.80.2\build\net462\SkiaSharp.targets'))" />
-    <Error Condition="!Exists('..\packages\DYMO.Connect.SDK.1.4.4.21\Build\DYMO.Connect.SDK.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\DYMO.Connect.SDK.1.4.4.21\Build\DYMO.Connect.SDK.targets'))" />
-  </Target>
-  <Import Project="..\packages\DYMO.Connect.SDK.1.4.4.21\Build\DYMO.Connect.SDK.targets" Condition="Exists('..\packages\DYMO.Connect.SDK.1.4.4.21\Build\DYMO.Connect.SDK.targets')" />
 </Project>

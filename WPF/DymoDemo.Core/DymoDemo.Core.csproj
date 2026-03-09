@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DYMO.Connect.SDK" Version="1.6.0" NoWarn="NU1701" />
+    <PackageReference Include="DYMO.CrossPlatform.Common.Windows" Version="1.6.0" NoWarn="NU1701" />
+    <PackageReference Include="DYMO.LabelAPI.Windows" Version="1.6.0" NoWarn="NU1701;NU1603" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
+  </ItemGroup>
+
+</Project>

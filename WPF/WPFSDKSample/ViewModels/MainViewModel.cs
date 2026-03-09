@@ -139,7 +139,7 @@ namespace WPFSDKSample.ViewModels
             {
                 _selectedPrinter = value;
                 NotifyPropertyChanged("SelectedPrinter");
-                DisplayConsumableInformation();
+                _ = DisplayConsumableInformation();
             }
         }
 
@@ -199,7 +199,7 @@ namespace WPFSDKSample.ViewModels
         public MainViewModel()
         {
             DymoSDK.App.Init();
-            dymoSDKLabel = DymoLabel.Instance;
+            dymoSDKLabel = DymoLabel.LabelSharedInstance;
             TwinTurboRolls = new List<string>() { "Auto", "Left", "Right" };
             LoadPrinters();
         }

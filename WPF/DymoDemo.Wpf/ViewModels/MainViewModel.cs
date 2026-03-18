@@ -222,7 +222,7 @@ public class MainViewModel : BaseViewModel
         ConsumableInfoText = string.Empty;
         if (SelectedPrinter != null)
         {
-            var info = await _dymoService.GetConsumableInfoAsync(SelectedPrinter.DriverName);
+            var info = await _dymoService.GetConsumableInfoAsync(SelectedPrinter.Name);
             if (info != null)
             {
                 ConsumableInfoText = $"Status: {info.Status} \nConsumable: {info.Name} \nLabels remaining: {info.LabelsRemaining}";

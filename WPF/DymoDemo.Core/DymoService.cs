@@ -115,21 +115,21 @@ public class DymoService
     /// <summary>
     /// Checks whether the printer supports roll/consumable status queries.
     /// </summary>
-    public bool IsRollStatusSupported(string driverName)
+    public bool IsRollStatusSupported(string printerName)
     {
-        return DymoPrinter.Instance.IsRollStatusSupported(driverName);
+        return DymoPrinter.Instance.IsRollStatusSupported(printerName);
     }
 
     /// <summary>
     /// Retrieves consumable/roll information for the specified printer.
     /// Returns null if the printer does not support roll status or is not yet connected.
     /// </summary>
-    public async Task<ConsumableInfo?> GetConsumableInfoAsync(string driverName)
+    public async Task<ConsumableInfo?> GetConsumableInfoAsync(string printerName)
     {
-        if (!DymoPrinter.Instance.IsRollStatusSupported(driverName))
+        if (!DymoPrinter.Instance.IsRollStatusSupported(printerName))
             return null;
 
-        var rollStatus = await DymoPrinter.Instance.GetRollStatusInPrinter(driverName);
+        var rollStatus = await DymoPrinter.Instance.GetRollStatusInPrinter(printerName);
         if (rollStatus == null)
             return null;
 

@@ -1,5 +1,6 @@
-using System.IO;
+using DYMO.CrossPlatform.Common.Interfaces;
 using DymoDemo.Core;
+using System.IO;
 
 namespace DymoDemo.Cli;
 
@@ -118,6 +119,15 @@ internal class Program
             }
 
             Console.WriteLine($"Using printer: {printer.Name}");
+
+            var info = await service.GetConsumableInfoAsync(printer.Name);
+
+            if (info.LabelsRemaining == "0")
+            {
+                Console.Error.WriteLine("Error: No labels remaining. Please replace the label roll.");
+                return 1;
+            }
+
 
             // Load label
             service.LoadLabel(labelFile);

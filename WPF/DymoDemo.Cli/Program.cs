@@ -77,18 +77,6 @@ internal class Program
             return 1;
         }
 
-        if (string.IsNullOrEmpty(labelFile))
-        {
-            Console.Error.WriteLine("Error: /LABEL is required.");
-            return 1;
-        }
-
-        if (!File.Exists(labelFile))
-        {
-            Console.Error.WriteLine($"Error: Label file not found: {labelFile}");
-            return 1;
-        }
-
         // Run
         try
         {
@@ -159,6 +147,18 @@ internal class Program
                 Console.Error.WriteLine("Warning: Printer does not support roll status queries. Cannot verify roll type.");
             }
 
+            // If no label file was supplied, just confirm the printer is available
+            if (string.IsNullOrEmpty(labelFile))
+            {
+                Console.WriteLine("Printer is available.");
+                return 0;
+            }
+
+            if (!File.Exists(labelFile))
+            {
+                Console.Error.WriteLine($"Error: Label file not found: {labelFile}");
+                return 1;
+            }
 
             // Load label
             service.LoadLabel(labelFile);
@@ -242,12 +242,13 @@ internal class Program
             DymoDemo.Cli - Command-line Dymo label printer
 
             Usage:
-              DymoDemo.Cli /PRINTER=<search> /LABEL=<file> [/SET:<name>=<value> ...] [/COPIES=<n>] [/ROLL=<Auto|Left|Right>] [/ROLLTYPE=<name>]
+              DymoDemo.Cli /PRINTER=<search> [/LABEL=<file>] [/SET:<name>=<value> ...] [/COPIES=<n>] [/ROLL=<Auto|Left|Right>] [/ROLLTYPE=<name>]
 
             Parameters:
               /PRINTER=<search>       Required. Matches the first printer whose name contains <search>.
                                       Example: /PRINTER=500
-              /LABEL=<file>           Required. Path to the .label or .dymo file.
+              /LABEL=<file>           Path to the .label or .dymo file. Required for printing.
+                                      If omitted, only checks whether the printer is available.
               /SET:<name>=<value>     Sets a label object value by its name. Repeat for multiple objects.
                                       Example: /SET:ProductName=Widget /SET:Price=9.99
               /COPIES=<n>             Number of copies to print (default: 1).
@@ -257,6 +258,7 @@ internal class Program
                                       Example: /ROLLTYPE=30336
 
             Examples:
+              DymoDemo.Cli /PRINTER=550
               DymoDemo.Cli /PRINTER=500 /LABEL=shipping.dymo /SET:Name="John Doe" /SET:Address="123 Main St"
               DymoDemo.Cli /PRINTER="LabelWriter" /LABEL=price.label /SET:Price=4.99 /COPIES=10
               DymoDemo.Cli /PRINTER=550 /LABEL=address.dymo /ROLLTYPE=30336

@@ -1,4 +1,3 @@
-using DYMO.CrossPlatform.Common.Interfaces;
 using DymoDemo.Core;
 using System.IO;
 
@@ -19,6 +18,7 @@ internal class Program
         string? labelFile = null;
         int copies = 1;
         int? roll = null;
+        string? rollType = null;
         var labelValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         foreach (var arg in args)
@@ -38,6 +38,10 @@ internal class Program
                     Console.Error.WriteLine($"Error: Invalid copies value '{copiesVal}'.");
                     return 1;
                 }
+            }
+            else if (TryParseArg(arg, "ROLLTYPE", out var rollTypeVal))
+            {
+                rollType = rollTypeVal;
             }
             else if (TryParseArg(arg, "ROLL", out var rollVal))
             {
@@ -120,12 +124,39 @@ internal class Program
 
             Console.WriteLine($"Using printer: {printer.Name}");
 
-            var info = await service.GetConsumableInfoAsync(printer.Name);
+            bool hasRollStatus = service.IsRollStatusSupported(printer.Name);
 
-            if (info.LabelsRemaining == "0")
+            if (hasRollStatus)
             {
-                Console.Error.WriteLine("Error: No labels remaining. Please replace the label roll.");
-                return 1;
+                Thread.Sleep(1000);
+                var info = await service.GetConsumableInfoAsync(printer.Name);
+
+                if (info != null && info.LabelsRemaining == "0")
+                {
+                    Console.Error.WriteLine("Error: No labels remaining. Please replace the label roll.");
+                    return 1;
+                }
+
+                if (rollType != null)
+                {
+                    if (info == null)
+                    {
+                        Console.Error.WriteLine("Error: Unable to retrieve consumable information to verify roll type.");
+                        return 1;
+                    }
+
+                    if (!info.Name.Contains(rollType, StringComparison.OrdinalIgnoreCase))
+                    {
+                        Console.Error.WriteLine($"Error: Expected roll type '{rollType}' but found '{info.Name}'.");
+                        return 1;
+                    }
+
+                    Console.WriteLine($"Roll type verified: {info.Name}");
+                }
+            }
+            else if (rollType != null)
+            {
+                Console.Error.WriteLine("Warning: Printer does not support roll status queries. Cannot verify roll type.");
             }
 
 
@@ -211,7 +242,7 @@ internal class Program
             DymoDemo.Cli - Command-line Dymo label printer
 
             Usage:
-              DymoDemo.Cli /PRINTER=<search> /LABEL=<file> [/SET:<name>=<value> ...] [/COPIES=<n>] [/ROLL=<Auto|Left|Right>]
+              DymoDemo.Cli /PRINTER=<search> /LABEL=<file> [/SET:<name>=<value> ...] [/COPIES=<n>] [/ROLL=<Auto|Left|Right>] [/ROLLTYPE=<name>]
 
             Parameters:
               /PRINTER=<search>       Required. Matches the first printer whose name contains <search>.
@@ -221,10 +252,14 @@ internal class Program
                                       Example: /SET:ProductName=Widget /SET:Price=9.99
               /COPIES=<n>             Number of copies to print (default: 1).
               /ROLL=<Auto|Left|Right> Roll selection for Twin Turbo 450 printers (default: not set).
+              /ROLLTYPE=<name>        Verifies the loaded roll type contains <name> before printing.
+                                      Requires a printer that supports roll status (e.g., LabelWriter 550).
+                                      Example: /ROLLTYPE=30336
 
             Examples:
               DymoDemo.Cli /PRINTER=500 /LABEL=shipping.dymo /SET:Name="John Doe" /SET:Address="123 Main St"
               DymoDemo.Cli /PRINTER="LabelWriter" /LABEL=price.label /SET:Price=4.99 /COPIES=10
+              DymoDemo.Cli /PRINTER=550 /LABEL=address.dymo /ROLLTYPE=30336
             """);
     }
 }

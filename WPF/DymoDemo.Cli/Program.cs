@@ -110,13 +110,13 @@ internal class Program
                 return 1;
             }
 
-            Console.WriteLine($"Using printer: {printer.Name}");
+            Console.WriteLine($"Using printer: {printer.Name}"); 
 
             bool hasRollStatus = service.IsRollStatusSupported(printer.Name);
 
-            if (hasRollStatus)
+            if (hasRollStatus && (rollType != null || !string.IsNullOrEmpty(labelFile)))
             {
-                Thread.Sleep(1000);
+                await Task.Delay(1000); // Small delay to ensure printer status is up to date
                 var info = await service.GetConsumableInfoAsync(printer.Name);
 
                 if (info != null && info.LabelsRemaining == "0")
